@@ -1,6 +1,8 @@
 package domain;
 
-import com.mysql.cj.jdbc.Blob;
+import java.sql.Blob;
+
+//import com.mysql.cj.jdbc.Blob;
 
 public class Justification {
 	private int id;
