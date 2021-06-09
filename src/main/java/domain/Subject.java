@@ -1,7 +1,6 @@
 package domain;
 
-public class Subject {
-	
+public class Subject { 
 	private int id; 
 	private String name;
 	
@@ -32,6 +31,6 @@ public class Subject {
 		this.name = name;
 	}
 
-
+ 
 
 }
