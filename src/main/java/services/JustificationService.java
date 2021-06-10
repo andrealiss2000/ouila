@@ -19,15 +19,17 @@ public class JustificationService {
 	JustificationRepository justificationRepository;
 
 	public List<Justification> fetchAllJustifications(Integer userId, Integer categoryId) {
-		return null;
+		return justificationRepository.findAll();
 	}
 
 	public Justification fetchJustificationById(Integer justificationId) throws ResourceNotFoundException {
-		return null;
+		return justificationRepository.findById(justificationId);
 	}
 
 	public Justification addJustification(Integer userId, Integer categoryId, Double amount, String note,
 			Long transactionDate) throws BadRequestException {
+		// Justification justification = new Justification();
+		// return justificationRepository.update(0, justification);
 		return null;
 	}
 

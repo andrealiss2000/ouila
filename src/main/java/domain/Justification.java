@@ -2,7 +2,6 @@ package domain;
 
 import java.sql.Blob;
 
-//import com.mysql.cj.jdbc.Blob;
 
 public class Justification {
 	private int id;
