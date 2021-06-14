@@ -14,24 +14,29 @@ public class CourseService {
     @Autowired
     CourseRepository courseRepository;
 
-    Course addCourse(Course course) {
+    public Course addCourse(Course course) {
         return courseRepository.save(course);
     }
 
-    Course getCourseById(Long courseId) {
+    public Course getCourseById(Long courseId) {
         return courseRepository.findById(courseId).get();
     }
 
-    void updateCourse(Course course) {
-        Course newCourse = courseRepository.findById(course.getId()).orElseThrow();
-        courseRepository.save(newCourse);
+    public void updateCourse(Course course) {
+        Course updatedCourse = courseRepository.findById(course.getId()).map(c -> {
+            c.setName(course.getName());
+            c.setSpeciality(course.getSpeciality());
+            return courseRepository.save(c);
+        }).orElseGet(() -> {
+            return courseRepository.save(course);
+        });
     }
 
-    void deleteCourseById(Long courseId) {
+    public void deleteCourseById(Long courseId) {
         courseRepository.deleteById(courseId);
     }
 
-    List<Course> getAllCourses() {
+    public List<Course> getAllCourses() {
         return courseRepository.findAll();
     }
 
