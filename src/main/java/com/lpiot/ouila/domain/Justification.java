@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Justification {
@@ -14,10 +15,14 @@ public class Justification {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
 	@Column(nullable = false)
 	private String comment;
-	@Column(nullable = true)
+
 	private Blob document;
+
+	@OneToOne(mappedBy = "justification", targetEntity = Presence.class)
+	private Presence presence;
 
 	public Justification() {
 	}
