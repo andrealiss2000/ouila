@@ -7,7 +7,6 @@ import com.lpiot.ouila.services.CourseService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,46 +24,45 @@ public class CourseResource {
     CourseService courseService;
 
     @GetMapping
-    List<Course> getAllCourses() {
-        return courseService.getAllCourses();
+    public ResponseEntity<List<Course>> getAllCourses() {
+        return ResponseEntity.ok().body(courseService.getAllCourses());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Course> getCoursesById(@PathVariable(value = "id") Long courseId) {
-        return ResponseEntity.ok().body(courseService.getCourseById(courseId));
+        try {
+            Course course = courseService.getCourseById(courseId);
+            return ResponseEntity.ok().body(course);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping
-    public Course createCourse(@Validated @RequestBody Course course) {
-        return courseService.addCourse(course);
+    public ResponseEntity<Course> createCourse(@RequestBody Course course) {
+        try {
+            return ResponseEntity.ok().body(courseService.addCourse(course));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
-    // @PutMapping("/{id}")
-    // ResponseEntity<?> replaceCourse(@RequestBody Course newCourse, @PathVariable
-    // Long id) {
-
-    // Course updatedCourse = courseService.updateCourse(newCourse); .findById(id)
-    // //
-    // .map(employee -> {
-    // employee.setName(newEmployee.getName());
-    // employee.setRole(newEmployee.getRole());
-    // return repository.save(employee);
-    // }) //
-    // .orElseGet(() -> {
-    // newEmployee.setId(id);
-    // return repository.save(newEmployee);
-    // });
-
-    // EntityModel<Course> entityModel = assembler.toModel(updatedEmployee);
-
-    // return ResponseEntity //
-    // .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()) //
-    // .body(entityModel);
-    // }
+    @PutMapping("/{id}")
+    ResponseEntity<Course> replaceCourse(@RequestBody Course newCourse, @PathVariable Long id) {
+        try {
+            return ResponseEntity.ok().body(courseService.updateCourse(id, newCourse));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<?> deleteCourse(@PathVariable Long id) {
-        courseService.deleteCourseById(id);
-        return ResponseEntity.noContent().build();
+    ResponseEntity<String> deleteCourse(@PathVariable Long id) {
+        try {
+            courseService.deleteCourseById(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

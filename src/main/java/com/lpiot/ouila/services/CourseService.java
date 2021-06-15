@@ -22,8 +22,8 @@ public class CourseService {
         return courseRepository.findById(courseId).get();
     }
 
-    public void updateCourse(Course course) {
-        Course updatedCourse = courseRepository.findById(course.getId()).map(c -> {
+    public Course updateCourse(Long id, Course course) {
+        return courseRepository.findById(id).map(c -> {
             c.setName(course.getName());
             c.setSpeciality(course.getSpeciality());
             return courseRepository.save(c);
