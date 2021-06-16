@@ -7,6 +7,7 @@ import com.lpiot.ouila.domain.Lesson;
 import com.lpiot.ouila.services.LessonService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/lessons")
@@ -42,7 +45,9 @@ public class LessonResource {
     public ResponseEntity<Lesson> createLesson(@RequestBody Lesson lesson) {
         try {
             Lesson newLesson = lessonService.addLesson(lesson);
-            return ResponseEntity.created(new URI("/lessons/" + newLesson.getId())).body(lesson);
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                    .buildAndExpand(newLesson.getId()).toUri();
+            return ResponseEntity.created(location).body(lesson);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
@@ -58,12 +63,8 @@ public class LessonResource {
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<String> deleteLesson(@PathVariable Long id) {
-        try {
-            lessonService.deleteLessonById(id);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void deleteLesson(@PathVariable Long id) {
+        lessonService.deleteLessonById(id);
     }
 }
