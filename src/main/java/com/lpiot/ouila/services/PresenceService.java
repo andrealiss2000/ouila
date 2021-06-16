@@ -14,24 +14,28 @@ public class PresenceService {
     @Autowired
     PresenceRepository repository;
 
-    Presence addCourse(Presence presence) {
+    public Presence addPresence(Presence presence) {
         return repository.save(presence);
     }
 
-    Presence getPresenceById(Long presenceId) {
+    public Presence getPresenceById(Long presenceId) {
         return repository.findById(presenceId).get();
     }
 
-    void updatePresence(Presence presence) {
-        Presence newPresence = repository.findById(presence.getId()).orElseThrow();
-        repository.save(newPresence);
+    public Presence updatePresence(Long id, Presence presence) {
+        return repository.findById(id).map(c -> {
+            c.setStatus(presence.getStatus());
+            return repository.save(c);
+        }).orElseGet(() -> {
+            return repository.save(presence);
+        });
     }
 
-    void deletePresenceById(Long presenceId) {
+    public void deletePresenceById(Long presenceId) {
         repository.deleteById(presenceId);
     }
 
-    List<Presence> getAllPresences() {
+    public List<Presence> getAllPresences() {
         return repository.findAll();
     }
 }

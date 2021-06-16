@@ -14,24 +14,29 @@ public class LessonService {
     @Autowired
     LessonRepository repository;
 
-    Lesson addCourse(Lesson lesson) {
+    public Lesson addLesson(Lesson lesson) {
         return repository.save(lesson);
     }
 
-    Lesson getLessonById(Long lessonId) {
+    public Lesson getLessonById(Long lessonId) {
         return repository.findById(lessonId).get();
     }
 
-    void updateLesson(Lesson lesson) {
-        Lesson newLesson = repository.findById(lesson.getId()).orElseThrow();
-        repository.save(newLesson);
+    public Lesson updateLesson(Long id, Lesson lesson) {
+        return repository.findById(id).map(c -> {
+            c.setStartDateTime(lesson.getStartDateTime());
+            c.setEndDateTime(lesson.getEndDateTime());
+            return repository.save(c);
+        }).orElseGet(() -> {
+            return repository.save(lesson);
+        });
     }
 
-    void deleteLessonById(Long lessonId) {
+    public void deleteLessonById(Long lessonId) {
         repository.deleteById(lessonId);
     }
 
-    List<Lesson> getAllLessons() {
+    public List<Lesson> getAllLessons() {
         return repository.findAll();
     }
 }

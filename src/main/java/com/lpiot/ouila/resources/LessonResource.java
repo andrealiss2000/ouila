@@ -3,8 +3,8 @@ package com.lpiot.ouila.resources;
 import java.net.URI;
 import java.util.List;
 
-import com.lpiot.ouila.domain.Course;
-import com.lpiot.ouila.services.CourseService;
+import com.lpiot.ouila.domain.Lesson;
+import com.lpiot.ouila.services.LessonService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,50 +18,49 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/courses")
-public class CourseResource {
-
+@RequestMapping("/lessons")
+public class LessonResource {
     @Autowired
-    CourseService courseService;
+    LessonService lessonService;
 
     @GetMapping
-    public ResponseEntity<List<Course>> getAllCourses() {
-        return ResponseEntity.ok().body(courseService.getAllCourses());
+    public ResponseEntity<List<Lesson>> getAllLessons() {
+        return ResponseEntity.ok().body(lessonService.getAllLessons());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Course> getCoursesById(@PathVariable(value = "id") Long courseId) {
+    public ResponseEntity<Lesson> getLessonById(@PathVariable(value = "id") Long id) {
         try {
-            Course course = courseService.getCourseById(courseId);
-            return ResponseEntity.ok().body(course);
+            Lesson lesson = lessonService.getLessonById(id);
+            return ResponseEntity.ok().body(lesson);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @PostMapping
-    public ResponseEntity<Course> createCourse(@RequestBody Course course) {
+    public ResponseEntity<Lesson> createLesson(@RequestBody Lesson lesson) {
         try {
-            Course newCourse = courseService.addCourse(course);
-            return ResponseEntity.created(new URI("/courses/" + newCourse.getId())).body(course);
+            Lesson newLesson = lessonService.addLesson(lesson);
+            return ResponseEntity.created(new URI("/lessons/" + newLesson.getId())).body(lesson);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<Course> replaceCourse(@RequestBody Course newCourse, @PathVariable Long id) {
+    ResponseEntity<Lesson> replaceLesson(@RequestBody Lesson newLesson, @PathVariable Long id) {
         try {
-            return ResponseEntity.ok().body(courseService.updateCourse(id, newCourse));
+            return ResponseEntity.ok().body(lessonService.updateLesson(id, newLesson));
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<String> deleteCourse(@PathVariable Long id) {
+    ResponseEntity<String> deleteLesson(@PathVariable Long id) {
         try {
-            courseService.deleteCourseById(id);
+            lessonService.deleteLessonById(id);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();

@@ -13,24 +13,36 @@ public class UserService {
     @Autowired
     UserRepository repository;
 
-    User addCourse(User user) {
+    public User addUser(User user) {
         return repository.save(user);
     }
 
-    User getUserById(Long userId) {
+    public User getUserById(Long userId) {
         return repository.findById(userId).get();
     }
 
-    void updateUser(User user) {
-        User newUser = repository.findById(user.getId()).orElseThrow();
-        repository.save(newUser);
+    public User updateUser(Long id, User user) {
+        return repository.findById(id).map(c -> {
+            c.setAddress(user.getAddress());
+            c.setCardNumber(user.getCardNumber());
+            c.setEmail(user.getEmail());
+            c.setFirstName(user.getFirstName());
+            c.setLastName(user.getLastName());
+            c.setUsername(user.getUsername());
+            c.setPassword(user.getPassword());
+            c.setPhone(user.getPhone());
+            return repository.save(c);
+        }).orElseGet(() -> {
+            return repository.save(user);
+        });
     }
 
-    void deleteUserById(Long userId) {
+    public void deleteUserById(Long userId) {
         repository.deleteById(userId);
     }
 
-    List<User> getAllUsers() {
+    public List<User> getAllUsers() {
         return repository.findAll();
     }
+
 }

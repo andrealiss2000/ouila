@@ -3,8 +3,8 @@ package com.lpiot.ouila.resources;
 import java.net.URI;
 import java.util.List;
 
-import com.lpiot.ouila.domain.Course;
-import com.lpiot.ouila.services.CourseService;
+import com.lpiot.ouila.domain.Role;
+import com.lpiot.ouila.services.RoleService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,50 +18,49 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/courses")
-public class CourseResource {
-
+@RequestMapping("/roles")
+public class RoleResource {
     @Autowired
-    CourseService courseService;
+    RoleService roleService;
 
     @GetMapping
-    public ResponseEntity<List<Course>> getAllCourses() {
-        return ResponseEntity.ok().body(courseService.getAllCourses());
+    public ResponseEntity<List<Role>> getAllRoles() {
+        return ResponseEntity.ok().body(roleService.getAllRoles());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Course> getCoursesById(@PathVariable(value = "id") Long courseId) {
+    public ResponseEntity<Role> getRoleById(@PathVariable(value = "id") Long id) {
         try {
-            Course course = courseService.getCourseById(courseId);
-            return ResponseEntity.ok().body(course);
+            Role role = roleService.getRoleById(id);
+            return ResponseEntity.ok().body(role);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @PostMapping
-    public ResponseEntity<Course> createCourse(@RequestBody Course course) {
+    public ResponseEntity<Role> createRole(@RequestBody Role role) {
         try {
-            Course newCourse = courseService.addCourse(course);
-            return ResponseEntity.created(new URI("/courses/" + newCourse.getId())).body(course);
+            Role newRole = roleService.addRole(role);
+            return ResponseEntity.created(new URI("/roles/" + newRole.getId())).body(role);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<Course> replaceCourse(@RequestBody Course newCourse, @PathVariable Long id) {
+    ResponseEntity<Role> replaceRole(@RequestBody Role newRole, @PathVariable Long id) {
         try {
-            return ResponseEntity.ok().body(courseService.updateCourse(id, newCourse));
+            return ResponseEntity.ok().body(roleService.updateRole(id, newRole));
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<String> deleteCourse(@PathVariable Long id) {
+    ResponseEntity<String> deleteRole(@PathVariable Long id) {
         try {
-            courseService.deleteCourseById(id);
+            roleService.deleteRoleById(id);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();

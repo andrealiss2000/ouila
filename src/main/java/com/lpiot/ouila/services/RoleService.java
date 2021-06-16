@@ -13,24 +13,28 @@ public class RoleService {
     @Autowired
     RoleRepository repository;
 
-    Role addCourse(Role role) {
+    public Role addRole(Role role) {
         return repository.save(role);
     }
 
-    Role getRoleById(Long roleId) {
+    public Role getRoleById(Long roleId) {
         return repository.findById(roleId).get();
     }
 
-    void updateRole(Role role) {
-        Role newRole = repository.findById(role.getId()).orElseThrow();
-        repository.save(newRole);
+    public Role updateRole(Long id, Role role) {
+        return repository.findById(id).map(c -> {
+            c.setName(role.getName());
+            return repository.save(c);
+        }).orElseGet(() -> {
+            return repository.save(role);
+        });
     }
 
-    void deleteRoleById(Long roleId) {
+    public void deleteRoleById(Long roleId) {
         repository.deleteById(roleId);
     }
 
-    List<Role> getAllRoles() {
+    public List<Role> getAllRoles() {
         return repository.findAll();
     }
 }

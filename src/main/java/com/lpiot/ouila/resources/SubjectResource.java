@@ -3,8 +3,8 @@ package com.lpiot.ouila.resources;
 import java.net.URI;
 import java.util.List;
 
-import com.lpiot.ouila.domain.Course;
-import com.lpiot.ouila.services.CourseService;
+import com.lpiot.ouila.domain.Subject;
+import com.lpiot.ouila.services.SubjectService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,50 +18,49 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/courses")
-public class CourseResource {
-
+@RequestMapping("/subjects")
+public class SubjectResource {
     @Autowired
-    CourseService courseService;
+    SubjectService subjectService;
 
     @GetMapping
-    public ResponseEntity<List<Course>> getAllCourses() {
-        return ResponseEntity.ok().body(courseService.getAllCourses());
+    public ResponseEntity<List<Subject>> getAllSubjects() {
+        return ResponseEntity.ok().body(subjectService.getAllSubjects());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Course> getCoursesById(@PathVariable(value = "id") Long courseId) {
+    public ResponseEntity<Subject> getSubjectById(@PathVariable(value = "id") Long id) {
         try {
-            Course course = courseService.getCourseById(courseId);
-            return ResponseEntity.ok().body(course);
+            Subject subject = subjectService.getSubjectById(id);
+            return ResponseEntity.ok().body(subject);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @PostMapping
-    public ResponseEntity<Course> createCourse(@RequestBody Course course) {
+    public ResponseEntity<Subject> createSubject(@RequestBody Subject subject) {
         try {
-            Course newCourse = courseService.addCourse(course);
-            return ResponseEntity.created(new URI("/courses/" + newCourse.getId())).body(course);
+            Subject newSubject = subjectService.addSubject(subject);
+            return ResponseEntity.created(new URI("/subjects/" + newSubject.getId())).body(subject);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<Course> replaceCourse(@RequestBody Course newCourse, @PathVariable Long id) {
+    ResponseEntity<Subject> replaceSubject(@RequestBody Subject newSubject, @PathVariable Long id) {
         try {
-            return ResponseEntity.ok().body(courseService.updateCourse(id, newCourse));
+            return ResponseEntity.ok().body(subjectService.updateSubject(id, newSubject));
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<String> deleteCourse(@PathVariable Long id) {
+    ResponseEntity<String> deleteSubject(@PathVariable Long id) {
         try {
-            courseService.deleteCourseById(id);
+            subjectService.deleteSubjectById(id);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();

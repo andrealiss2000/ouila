@@ -13,24 +13,28 @@ public class SubjectService {
     @Autowired
     SubjectRepository repository;
 
-    Subject addCourse(Subject subject) {
+    public Subject addSubject(Subject subject) {
         return repository.save(subject);
     }
 
-    Subject getSubjectById(Long subjectId) {
+    public Subject getSubjectById(Long subjectId) {
         return repository.findById(subjectId).get();
     }
 
-    void updateSubject(Subject subject) {
-        Subject newSubject = repository.findById(subject.getId()).orElseThrow();
-        repository.save(newSubject);
+    public Subject updateSubject(Long id, Subject subject) {
+        return repository.findById(id).map(c -> {
+            c.setName(subject.getName());
+            return repository.save(c);
+        }).orElseGet(() -> {
+            return repository.save(subject);
+        });
     }
 
-    void deleteSubjectById(Long subjectId) {
+    public void deleteSubjectById(Long subjectId) {
         repository.deleteById(subjectId);
     }
 
-    List<Subject> getAllSubjects() {
+    public List<Subject> getAllSubjects() {
         return repository.findAll();
     }
 }

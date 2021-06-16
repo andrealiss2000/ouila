@@ -14,24 +14,29 @@ public class JustificationService {
 	@Autowired
 	JustificationRepository justificationRepository;
 
-	Justification addCourse(Justification justification) {
+	public Justification addJustification(Justification justification) {
 		return justificationRepository.save(justification);
 	}
 
-	Justification getJustificationById(Long justificationId) {
+	public Justification getJustificationById(Long justificationId) {
 		return justificationRepository.findById(justificationId).get();
 	}
 
-	void updateJustification(Justification justification) {
-		Justification newJustification = justificationRepository.findById(justification.getId()).orElseThrow();
-		justificationRepository.save(newJustification);
+	public Justification updateJustification(Long id, Justification justification) {
+		return justificationRepository.findById(id).map(c -> {
+			c.setComment(justification.getComment());
+			c.setDocument(justification.getDocument());
+			return justificationRepository.save(c);
+		}).orElseGet(() -> {
+			return justificationRepository.save(justification);
+		});
 	}
 
-	void deleteJustificationById(Long justificationId) {
+	public void deleteJustificationById(Long justificationId) {
 		justificationRepository.deleteById(justificationId);
 	}
 
-	List<Justification> getAllJustifications() {
+	public List<Justification> getAllJustifications() {
 		return justificationRepository.findAll();
 	}
 }
