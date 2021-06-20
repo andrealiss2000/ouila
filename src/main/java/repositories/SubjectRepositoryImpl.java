@@ -5,6 +5,7 @@ import java.sql.Statement;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -17,7 +18,7 @@ import exceptions.SubjectFormatException;
 public class SubjectRepositoryImpl implements SubjectRepository{
 	
 	private static final String SQL_CREATE = "INSERT INTO subject(name) VALUES(?)";
-	private static final String SQL_GET_BY_NAME = "SELECT * FROM subject WHERE name = ? ";
+	private static final String SQL_FIND_BY_NAME = "SELECT * FROM subject WHERE name = ? ";
 	
 	@Autowired 
 	JdbcTemplate jdbcTemplate;
@@ -38,14 +39,15 @@ public class SubjectRepositoryImpl implements SubjectRepository{
 		}
 	}
 
-	public Subject getSubjectsByName(String name) throws SubjectFormatException {
-		// TODO Auto-generated method stub
-		return null;
+	public Subject getSubjectByName(String name) throws SubjectFormatException {
+		return jdbcTemplate.queryForObject(SQL_FIND_BY_NAME, new Object[] {name}, subjectRowMapper);
 	}
 	
-	public Subject getSubjectById(int id) throws SubjectFormatException {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
+	
+	private RowMapper<Subject> subjectRowMapper = ((rs, rowNum) ->{
+		return new Subject(rs.getInt("id"),
+				rs.getString("name"));
+	});
 
 }

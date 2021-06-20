@@ -12,12 +12,12 @@ public class Subject {
 	}
 	
 	
-	public int getCourse() {
+	public int getId() {
 		return id;
 	}
 
 
-	public void setCourse(int course) {
+	public void setId(int course) {
 		this.id = course;
 	}
 

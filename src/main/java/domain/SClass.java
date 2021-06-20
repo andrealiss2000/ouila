@@ -2,14 +2,14 @@ package domain;
 
 import java.util.Date;
 
-public class Class {
+public class SClass {
 	  private int  id;
 	  private Subject subject;
 	  private User teacher;
 	  private Date start;
 	  private Date end;
 	  
-	public Class(int id, Subject subject, User teacher, Date start, Date end) {
+	public SClass(int id, Subject subject, User teacher, Date start, Date end) {
 		this.id = id;
 		this.subject = subject;
 		this.teacher = teacher;

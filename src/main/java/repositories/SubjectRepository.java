@@ -7,8 +7,7 @@ public interface SubjectRepository {
 	
 	Integer create(String name) throws SubjectFormatException;
 	
-	Subject getSubjectsByName(String name) throws SubjectFormatException;
+	Subject getSubjectByName(String name) throws SubjectFormatException;
 	
-	Subject getSubjectById(int id) throws SubjectFormatException;
 
 }
