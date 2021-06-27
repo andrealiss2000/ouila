@@ -10,10 +10,10 @@ public class User {
 	private String password;
 	private Integer phone = null;
 	private String address = null;
-	private Course course; // Formation
-	private Role role;
+	private int course; // Formation
+	private int role;
 	
-	public User(Integer id, String firstname, String surname, String mail, String username, String password, Course course, Role role) { 
+	public User(Integer id, String firstname, String surname, String mail, String username, String password, int course, int role) { 
 		this.id = id;
 		this.firstname = firstname;
 		this.surname = surname;
@@ -96,19 +96,19 @@ public class User {
 		this.address = address;
 	}
 
-	public Course getCourse() {
+	public int getCourse() {
 		return course;
 	}
 
-	public void setCourse(Course course) {
+	public void setCourse(int course) {
 		this.course = course;
 	}
 
-	public Role getRole() {
+	public int getRole() {
 		return role;
 	}
 
-	public void setRole(Role role) {
+	public void setRole(int role) {
 		this.role = role;
 	}
 	
