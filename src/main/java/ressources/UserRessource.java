@@ -2,6 +2,7 @@ package ressources;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,29 +41,46 @@ public class UserRessource {
 	}
 	
 	@PostMapping("")
-	public ResponseEntity<User> addUser(HttpServletRequest request, @RequestBody Map<String, Object> userMap){
-		return null;  
+	public ResponseEntity<Map<String, String>> addUser(HttpServletRequest request, @RequestBody Map<String, Object> userMap){
+		String firstname = (String) userMap.get("firstname");
+		String password = (String) userMap.get("password");  
+		String username = (String) userMap.get("username");
+		String surname = (String) userMap.get("surname");  
+		String mail = (String) userMap.get("mail");
+		int course = (int) userMap.get("course");  
+		int role =  (int) userMap.get("role"); 
+		
+		User user = userService.addUser(firstname, surname, mail, username, password, course, role);
+		Map<String, String> map = new HashMap<>();
+		map.put("message", "user created !");
+		return new ResponseEntity<>(map, HttpStatus.OK);  
 	}
 	
 	@DeleteMapping("")
 	public ResponseEntity<User> deleteUser(HttpServletRequest request, @RequestBody Map<String, Object> userMap){
-		return null; 
-		 
+		int id = (int) userMap.get("id");
+		User user = userService.deleteUser(id);
+		return new ResponseEntity<>(user, HttpStatus.OK);  
 	}
 	
 	@GetMapping("/students")
-	public ResponseEntity<User> getStudents(HttpServletRequest request, @RequestBody Map<String, Object> userMap){
-		return null;  
+	public ResponseEntity<List<User>> getStudents(HttpServletRequest request, @RequestBody Map<String, Object> userMap){ 
+		int idClass = (int) userMap.get("idClass");
+		List<User> students = userService.getStudents(idClass);
+		return new ResponseEntity<>(students, HttpStatus.OK); 
 	}
 	
 	@GetMapping("/student")
 	public ResponseEntity<User> getStudent(HttpServletRequest request, @RequestBody Map<String, Object> userMap){
-		return null;  
+		int id = (int) userMap.get("id");
+		User student = userService.getStudent(id);
+		return new ResponseEntity<>(student, HttpStatus.OK); 
 	}
 	
 	@GetMapping("")
-	public ResponseEntity<User> getUsers(HttpServletRequest request, @RequestBody Map<String, Object> userMap){
-		return null;  
+	public ResponseEntity<List<User>> getUsers(HttpServletRequest request, @RequestBody Map<String, Object> userMap){
+		List<User> users = userService.getAllUsers();
+		return new ResponseEntity<>(users, HttpStatus.OK);
 	}
 	
 	
