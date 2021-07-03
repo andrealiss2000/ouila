@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import domain.User;
+import repositories.UserRepository;
 import exceptions.EtAuthException;
 import exceptions.EtBadRequestException;
 import exceptions.EtRessourceNotFoundException;
@@ -16,12 +17,13 @@ import repositories.UserRepository;
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
-
-	@Autowired 
-	UserRepository userRepository;
+	
+	@Autowired
+	repositories.UserRepository userRepository;
+	
 	@Override
-	public User validateUser(String username, String password) throws EtAuthException {
-		if(username != null) username = username.toLowerCase();
+	public User validateUser(String username, String password) throws EtAuthException { 
+		if(username != null) username = username.toLowerCase(); 
 		return userRepository.findByUsernameAndPassword(username, password);
 	}
 	@Override
@@ -40,7 +42,7 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public User addUser(String firstname, String surname, String mail, String username, String password,
+	public User addUser(String firstname, String lastname, String mail, String username, String password,
 			int course, int role) throws EtAuthException {
 		Pattern pattern = Pattern.compile("^(.+)@(.+)$");
 		if(mail != null) mail = mail.toLowerCase();
@@ -49,7 +51,7 @@ public class UserServiceImpl implements UserService {
 		Integer count = userRepository.getCountByEmail(mail);
 		if(count>0)
 			throw new EtAuthException("Email already in use");
-		int userId = userRepository.create(firstname, surname, mail, username, password, course, role);
+		int userId = userRepository.create(firstname, lastname, mail, username, password, course, role);
 		return userRepository.findById(userId);
 	}
 	

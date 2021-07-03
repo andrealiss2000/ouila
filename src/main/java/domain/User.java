@@ -3,9 +3,9 @@ package domain;
 public class User {
 	private Integer id;
 	private String firstname;
-	private String surname;
-	private String mail;
-	private String card_number = null;
+	private String lastname;
+	private String email;
+	private String cardnumber = null;
 	private String username;
 	private String password;
 	private Integer phone = null;
@@ -13,11 +13,11 @@ public class User {
 	private int course; // Formation
 	private int role;
 	
-	public User(Integer id, String firstname, String surname, String mail, String username, String password, int course, int role) { 
+	public User(Integer id, String firstname, String lastname, String email, String username, String password, int course, int role) { 
 		this.id = id;
 		this.firstname = firstname;
-		this.surname = surname;
-		this.mail = mail;
+		this.lastname = lastname;
+		this.email = email;
 		this.username = username;
 		this.password = password;
 		this.course = course;
@@ -40,28 +40,28 @@ public class User {
 		this.firstname = firstname;
 	}
 
-	public String getSurname() {
-		return surname;
+	public String getLastName() {
+		return lastname;
 	}
 
-	public void setSurname(String surname) {
-		this.surname = surname;
+	public void setLastName(String last_name) {
+		this.lastname = last_name;
 	}
 
 	public String getMail() {
-		return mail;
+		return email;
 	}
 
 	public void setMail(String mail) {
-		this.mail = mail;
+		this.email = mail;
 	}
 
 	public String getCard_number() {
-		return card_number;
+		return cardnumber;
 	}
 
 	public void setCard_number(String card_number) {
-		this.card_number = card_number;
+		this.cardnumber = card_number;
 	}
 
 	public String getUsername() {

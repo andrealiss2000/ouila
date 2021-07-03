@@ -43,7 +43,7 @@ public class AuthFilter extends GenericFilterBean{
 				return;
 			}
 		}else {
-			httpResponse.sendError(HttpStatus.FORBIDDEN.value() , "Authorizatio token must be provided");
+			httpResponse.sendError(HttpStatus.FORBIDDEN.value() , "Authorization token must be provided");
 			return;
 		}
 		chain.doFilter(httpRequest, httpResponse);

@@ -10,12 +10,15 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lpiot.ouila.Constants;
@@ -25,15 +28,15 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import services.UserService;
 
-@RestController
+@Controller
 @RequestMapping("/users")
 public class UserRessource {
 	
 	@Autowired
 	UserService userService;
 
-	@PostMapping("/login")
-	public ResponseEntity<Map<String, String>> loginUser(@RequestBody Map<String, Object> userMap){
+	@PostMapping("/login") 
+	public ResponseEntity<Map<String, String>> loginUser(@RequestBody Map<String, Object> userMap){ 
 		String username = (String) userMap.get("username");
 		String password = (String) userMap.get("password");  
 		User user = userService.validateUser(username, password);
@@ -45,8 +48,8 @@ public class UserRessource {
 		String firstname = (String) userMap.get("firstname");
 		String password = (String) userMap.get("password");  
 		String username = (String) userMap.get("username");
-		String surname = (String) userMap.get("surname");  
-		String mail = (String) userMap.get("mail");
+		String surname = (String) userMap.get("lastname");  
+		String mail = (String) userMap.get("email");
 		int course = (int) userMap.get("course");  
 		int role =  (int) userMap.get("role"); 
 		
@@ -90,9 +93,9 @@ public class UserRessource {
 				.setIssuedAt(new Date(timestamp))
 				.setExpiration(new Date(timestamp + Constants.TOKEN_VALIDITY))
 				.claim("id", user.getId())
-				.claim("mail", user.getMail())
+				.claim("email", user.getMail())
 				.claim("firstname", user.getFirstname())
-				.claim("surname", user.getSurname())
+				.claim("lastname", user.getLastName())
 				.compact();
 		
 		Map<String, String> map = new HashMap<>();
