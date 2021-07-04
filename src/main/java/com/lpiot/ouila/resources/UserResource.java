@@ -2,7 +2,9 @@ package com.lpiot.ouila.resources;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
+import com.lpiot.ouila.domain.ERole;
 import com.lpiot.ouila.domain.User;
 import com.lpiot.ouila.services.UserService;
 
@@ -31,32 +33,26 @@ public class UserResource {
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable(value = "id") Long id) {
         try {
-            User user = userService.getUserById(id);
-            return ResponseEntity.ok().body(user);
+            Optional<User> user = userService.getUserById(id);
+            if (user.isPresent()) {
+                return ResponseEntity.ok().body(user.get());
+            } else {
+                return ResponseEntity.notFound().build();
+            }
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
 
-    // @GetMapping("/students")
-    // public ResponseEntity<User> getAllStudents() {
-    // try {
-    // User user = userService.getUsersOfRole(getStudentrole here);
-    // return ResponseEntity.ok().body(user);
-    // } catch (Exception e) {
-    // return ResponseEntity.notFound().build();
-    // }
-    // }
+    @GetMapping("/students")
+    public ResponseEntity<List<User>> getAllStudents() {
+        return ResponseEntity.ok().body(userService.getUsersByRole(ERole.STUDENT));
+    }
 
-    // @GetMapping("/teachers")
-    // public ResponseEntity<User> getAllTeachers() {
-    // try {
-    // User user = userService.getUsersOfRole(get teacher role here);
-    // return ResponseEntity.ok().body(user);
-    // } catch (Exception e) {
-    // return ResponseEntity.notFound().build();
-    // }
-    // }
+    @GetMapping("/teachers")
+    public ResponseEntity<List<User>> getAllTeachers() {
+        return ResponseEntity.ok().body(userService.getUsersByRole(ERole.TEACHER));
+    }
 
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {

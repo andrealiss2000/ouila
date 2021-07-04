@@ -1,7 +1,9 @@
 package com.lpiot.ouila.services;
 
 import java.util.List;
+import java.util.Optional;
 
+import com.lpiot.ouila.domain.ERole;
 import com.lpiot.ouila.domain.User;
 import com.lpiot.ouila.repositories.UserRepository;
 
@@ -17,8 +19,12 @@ public class UserService {
         return repository.save(user);
     }
 
-    public User getUserById(Long userId) {
-        return repository.findById(userId).get();
+    public Optional<User> getUserById(Long userId) {
+        return repository.findById(userId);
+    }
+
+    public List<User> getUsersByRole(ERole role) {
+        return repository.findAllByRole(role);
     }
 
     public User updateUser(Long id, User user) {

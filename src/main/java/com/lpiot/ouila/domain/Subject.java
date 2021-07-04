@@ -10,7 +10,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Subject {
 
 	@Id
@@ -21,34 +30,7 @@ public class Subject {
 	private String name;
 
 	@OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, targetEntity = Lesson.class)
+	@JsonIgnore
 	private List<Lesson> lessons;
-
-	public Subject(String name) {
-		this.name = name;
-	}
-
-	public Subject() {
-	}
-
-	@Override
-	public String toString() {
-		return "Subject [id=" + id + ", name=" + name + "]";
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
 
 }

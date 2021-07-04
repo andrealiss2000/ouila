@@ -15,7 +15,16 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Lesson {
 
 	@Id
@@ -39,62 +48,7 @@ public class Lesson {
 	private Date endDateTime;
 
 	@OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, targetEntity = Presence.class)
+	@JsonIgnore
 	private List<Presence> presences;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public User getTeacher() {
-		return teacher;
-	}
-
-	public void setTeacher(User teacher) {
-		this.teacher = teacher;
-	}
-
-	public Subject getSubject() {
-		return subject;
-	}
-
-	public void setSubject(Subject subject) {
-		this.subject = subject;
-	}
-
-	public Date getStartDateTime() {
-		return startDateTime;
-	}
-
-	public void setStartDateTime(Date startDateTime) {
-		this.startDateTime = startDateTime;
-	}
-
-	public Date getEndDateTime() {
-		return endDateTime;
-	}
-
-	public void setEndDateTime(Date endDateTime) {
-		this.endDateTime = endDateTime;
-	}
-
-	@Override
-	public String toString() {
-		return "Lesson [endDateTime=" + endDateTime + ", id=" + id + ", startDateTime=" + startDateTime + ", subject="
-				+ subject + ", teacher=" + teacher + "]";
-	}
-
-	public Lesson(User teacher, Subject subject, Date startDateTime, Date endDateTime) {
-		this.teacher = teacher;
-		this.subject = subject;
-		this.startDateTime = startDateTime;
-		this.endDateTime = endDateTime;
-	}
-
-	public Lesson() {
-	}
 
 }

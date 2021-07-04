@@ -10,7 +10,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Presence {
 
     @Id
@@ -31,33 +38,5 @@ public class Presence {
 
     @Column(nullable = false)
     private Boolean status;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Boolean getStatus() {
-        return status;
-    }
-
-    public void setStatus(Boolean status) {
-        this.status = status;
-    }
-
-    @Override
-    public String toString() {
-        return "Presence [id=" + id + ", status=" + status + "]";
-    }
-
-    public Presence(Boolean status) {
-        this.status = status;
-    }
-
-    public Presence() {
-    }
 
 }

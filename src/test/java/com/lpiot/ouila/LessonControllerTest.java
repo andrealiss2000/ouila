@@ -38,6 +38,17 @@ public class LessonControllerTest {
     }
 
     @Test
+    @DisplayName("Should Get Specified Lesson")
+    public void testGetLesson() throws Exception {
+        mockMvc.perform(get("/lessons/1")).andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.size()", Matchers.is(1)));
+        // .andExpect(jsonPath("$[0].id", Matchers.is(1)))
+        // .andExpect(jsonPath("$[0].postName", Matchers.is("Post Name")))
+        // .andExpect(jsonPath("$[0].url", Matchers.is("http://url.site")));
+    }
+
+    @Test
     @DisplayName("Should Create A Lesson")
     public void testPostLesson() throws Exception {
         mockMvc.perform(post("/lessons")).andExpect(status().isCreated())

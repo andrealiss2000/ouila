@@ -8,9 +8,19 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.CascadeType;
 
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Course {
 
 	@Id
@@ -23,43 +33,6 @@ public class Course {
 	private String speciality;
 
 	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL, targetEntity = User.class)
+	@JsonIgnore
 	private List<User> users;
-
-	public Course(String name, String speciality) {
-		this.name = name;
-		this.speciality = speciality;
-	}
-
-	public Course() {
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getSpeciality() {
-		return speciality;
-	}
-
-	public void setSpeciality(String speciality) {
-		this.speciality = speciality;
-	}
-
-	@Override
-	public String toString() {
-		return "Course [id=" + id + ", name=" + name + ", speciality=" + speciality + "]";
-	}
-
 }
