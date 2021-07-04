@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.lpiot.ouila.domain.ERole;
+import com.lpiot.ouila.domain.Presence;
 import com.lpiot.ouila.domain.User;
 import com.lpiot.ouila.services.UserService;
 
@@ -36,6 +37,20 @@ public class UserResource {
             Optional<User> user = userService.getUserById(id);
             if (user.isPresent()) {
                 return ResponseEntity.ok().body(user.get());
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/{id}/presences")
+    public ResponseEntity<List<Presence>> getUserPresencesById(@PathVariable(value = "id") Long id) {
+        try {
+            Optional<User> user = userService.getUserById(id);
+            if (user.isPresent()) {
+                return ResponseEntity.ok().body(user.get().getPresences());
             } else {
                 return ResponseEntity.notFound().build();
             }
