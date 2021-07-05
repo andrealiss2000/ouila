@@ -8,7 +8,6 @@ import com.lpiot.ouila.domain.Role;
 import com.lpiot.ouila.domain.Course;
 import com.lpiot.ouila.domain.Presence;
 import com.lpiot.ouila.domain.User;
-import com.lpiot.ouila.repositories.CourseRepository;
 import com.lpiot.ouila.services.CourseService;
 import com.lpiot.ouila.services.UserService;
 
