@@ -51,11 +51,16 @@
       <artifactId>lombok</artifactId>
       <optional>true</optional>
     </dependency>
-	<!-- <dependency>
+	<dependency>
 			<groupId>com.google.zxing</groupId>
 			<artifactId>core</artifactId>
 			<version>3.4.1</version>
 		</dependency>
+    <dependency>
+    <groupId>com.google.zxing</groupId>
+    <artifactId>javase</artifactId>
+    <version>3.4.1</version>
+</dependency>
 		<dependency>
 			<groupId>org.mindrot</groupId>
 			<artifactId>jbcrypt</artifactId>
@@ -65,7 +70,7 @@
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt</artifactId>
 			<version>0.9.1</version>
-		</dependency> -->
+		</dependency>
   </dependencies>
 
   <build>

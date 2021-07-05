@@ -85,4 +85,14 @@ public class PresenceResource {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @GetMapping(value = "/qrcode")
+    public ResponseEntity<String> getQrCode() {
+        try {
+            String qrCodeStr = presenceService.generateQRCodeImage("hello");
+            return ResponseEntity.ok(qrCodeStr);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }
