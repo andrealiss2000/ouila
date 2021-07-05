@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
@@ -26,16 +27,14 @@ public class PresenceService {
         return repository.save(presence);
     }
 
-    public Presence getPresenceById(Long presenceId) {
-        return repository.findById(presenceId).get();
+    public Optional<Presence> getPresenceById(Long presenceId) {
+        return repository.findById(presenceId);
     }
 
-    public Presence updatePresence(Long id, Presence presence) {
+    public Optional<Presence> updateAttendance(Long id, Boolean isPresent) {
         return repository.findById(id).map(c -> {
-            c.setStatus(presence.getStatus());
+            c.setStatus(isPresent);
             return repository.save(c);
-        }).orElseGet(() -> {
-            return repository.save(presence);
         });
     }
 

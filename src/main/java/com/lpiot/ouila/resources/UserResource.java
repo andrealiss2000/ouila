@@ -1,13 +1,13 @@
 package com.lpiot.ouila.resources;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Optional;
-
-import com.lpiot.ouila.domain.Role;
 import com.lpiot.ouila.domain.Course;
 import com.lpiot.ouila.domain.Presence;
 import com.lpiot.ouila.domain.User;
+import com.lpiot.ouila.exceptions.CourseNotFoundException;
+import com.lpiot.ouila.exceptions.UserNotFoundException;
 import com.lpiot.ouila.services.CourseService;
 import com.lpiot.ouila.services.UserService;
 
@@ -38,66 +38,40 @@ public class UserResource {
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable(value = "id") Long id) {
-        try {
-            Optional<User> user = userService.getUserById(id);
-            if (user.isPresent()) {
-                return ResponseEntity.ok().body(user.get());
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        User user = userService.getUserById(id).orElseThrow(() -> new UserNotFoundException(id));
+        return ResponseEntity.ok().body(user);
     }
 
     @GetMapping("/{id}/presences")
     public ResponseEntity<List<Presence>> getUserPresencesById(@PathVariable(value = "id") Long id) {
-        try {
-            Optional<User> user = userService.getUserById(id);
-            if (user.isPresent()) {
-                return ResponseEntity.ok().body(user.get().getPresences());
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        User user = userService.getUserById(id).orElseThrow(() -> new UserNotFoundException(id));
+        return ResponseEntity.ok().body(user.getPresences());
     }
 
     @GetMapping("/students")
     public ResponseEntity<List<User>> getAllStudents() {
-        return ResponseEntity.ok().body(userService.getUsersByRole(Role.STUDENT));
+        return ResponseEntity.ok().body(userService.getStudents());
     }
 
     @GetMapping("/teachers")
     public ResponseEntity<List<User>> getAllTeachers() {
-        return ResponseEntity.ok().body(userService.getUsersByRole(Role.TEACHER));
+        return ResponseEntity.ok().body(userService.getTeachers());
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        try {
-            Optional<Course> course = courseService.getCourseById(user.getCourse().getId());
+    public ResponseEntity<User> createUser(@RequestBody User user) throws URISyntaxException {
+        Course course = courseService.getCourseById(user.getCourse().getId())
+                .orElseThrow(() -> new CourseNotFoundException(user.getCourse().getId()));
 
-            if (course.isPresent()) {
-                User newUser = userService.addUser(user);
-                newUser.setCourse(course.get());
-                return ResponseEntity.created(new URI("/users/" + newUser.getId())).body(user);
-            } else {
-                return ResponseEntity.badRequest().build();
-            }
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+        user.setCourse(course);
+        User newUser = userService.addUser(user);
+        return ResponseEntity.created(new URI("/users/" + newUser.getId())).body(user);
     }
 
     @PutMapping("/{id}")
     ResponseEntity<User> replaceUser(@RequestBody User newUser, @PathVariable Long id) {
-        try {
-            return ResponseEntity.ok().body(userService.updateUser(id, newUser));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+        userService.updateUser(id, newUser).orElseThrow(() -> new UserNotFoundException(id));
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
@@ -106,7 +80,7 @@ public class UserResource {
             userService.deleteUserById(id);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            throw new UserNotFoundException(id);
         }
     }
 }

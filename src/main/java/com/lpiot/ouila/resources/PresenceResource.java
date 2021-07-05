@@ -1,12 +1,15 @@
 package com.lpiot.ouila.resources;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Optional;
 
 import com.lpiot.ouila.domain.Lesson;
 import com.lpiot.ouila.domain.Presence;
 import com.lpiot.ouila.domain.User;
+import com.lpiot.ouila.exceptions.LessonNotFoundException;
+import com.lpiot.ouila.exceptions.StudentNotFoundException;
+import com.lpiot.ouila.exceptions.PresenceNotFoundException;
 import com.lpiot.ouila.services.LessonService;
 import com.lpiot.ouila.services.PresenceService;
 import com.lpiot.ouila.services.UserService;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -40,58 +44,29 @@ public class PresenceResource {
 
     @GetMapping("/{id}")
     public ResponseEntity<Presence> getPresenceById(@PathVariable(value = "id") Long id) {
-        try {
-            Presence presence = presenceService.getPresenceById(id);
-            return ResponseEntity.ok().body(presence);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        Presence presence = presenceService.getPresenceById(id).orElseThrow(() -> new PresenceNotFoundException(id));
+        return ResponseEntity.ok().body(presence);
     }
 
     @PostMapping
-    public ResponseEntity<Presence> createPresence(@RequestBody Presence presence) {
-        try {
-            Optional<Lesson> lesson = lessonService.getLessonById(presence.getLesson().getId());
-            Optional<User> user = userService.getUserById(presence.getStudent().getId());
+    public ResponseEntity<Presence> createPresence(@RequestBody Presence presence) throws URISyntaxException {
 
-            if (lesson.isPresent() && user.isPresent()) {
-                Presence newPresence = presenceService.addPresence(presence);
-                newPresence.setStudent(user.get());
-                newPresence.setLesson(lesson.get());
-                return ResponseEntity.created(new URI("/presences/" + newPresence.getId())).body(presence);
-            } else {
-                return ResponseEntity.badRequest().build();
-            }
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+        Lesson lesson = lessonService.getLessonById(presence.getLesson().getId())
+                .orElseThrow(() -> new LessonNotFoundException(presence.getLesson().getId()));
+        User student = userService.getStudentById(presence.getStudent().getId())
+                .orElseThrow(() -> new StudentNotFoundException(presence.getStudent().getId()));
+
+        presence.setStudent(student);
+        presence.setLesson(lesson);
+        Presence newPresence = presenceService.addPresence(presence);
+        return ResponseEntity.created(new URI("/presences/" + newPresence.getId())).body(presence);
+
     }
 
-    // @PostMapping("/{id}/{status}")
-    // public ResponseEntity<Presence> markPresence(@PathVariable Long lessonId,
-    // @PathVariable int status) {
-    // try {
-
-    // // find lesson from id
-
-    // // check user trying to mark presence
-
-    // // find presence with above params if exist
-
-    // // mark present or absent with status param
-    // return ResponseEntity.ok().body(presence);
-    // } catch (Exception e) {
-    // return ResponseEntity.badRequest().build();
-    // }
-    // }
-
     @PutMapping("/{id}")
-    ResponseEntity<Presence> replacePresence(@RequestBody Presence newPresence, @PathVariable Long id) {
-        try {
-            return ResponseEntity.ok().body(presenceService.updatePresence(id, newPresence));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+    ResponseEntity<Presence> updateAttendanceStatus(@RequestParam("status") Boolean status, @PathVariable Long id) {
+        presenceService.updateAttendance(id, status).orElseThrow(() -> new PresenceNotFoundException(id));
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
@@ -100,7 +75,7 @@ public class PresenceResource {
             presenceService.deletePresenceById(id);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            throw new PresenceNotFoundException(id);
         }
     }
 
