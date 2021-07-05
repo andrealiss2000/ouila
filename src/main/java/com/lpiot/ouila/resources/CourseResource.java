@@ -2,6 +2,7 @@ package com.lpiot.ouila.resources;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import com.lpiot.ouila.domain.Course;
 import com.lpiot.ouila.services.CourseService;
@@ -32,8 +33,12 @@ public class CourseResource {
     @GetMapping("/{id}")
     public ResponseEntity<Course> getCoursesById(@PathVariable(value = "id") Long courseId) {
         try {
-            Course course = courseService.getCourseById(courseId);
-            return ResponseEntity.ok().body(course);
+            Optional<Course> course = courseService.getCourseById(courseId);
+            if (course.isPresent()) {
+                return ResponseEntity.ok().body(course.get());
+            } else {
+                return ResponseEntity.notFound().build();
+            }
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }

@@ -5,9 +5,11 @@ import java.util.List;
 import java.util.Optional;
 
 import com.lpiot.ouila.domain.Role;
+import com.lpiot.ouila.domain.Course;
 import com.lpiot.ouila.domain.Presence;
 import com.lpiot.ouila.domain.User;
 import com.lpiot.ouila.repositories.CourseRepository;
+import com.lpiot.ouila.services.CourseService;
 import com.lpiot.ouila.services.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +30,7 @@ public class UserResource {
     UserService userService;
 
     @Autowired
-    CourseRepository courseRepository;
+    CourseService courseService;
 
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
@@ -76,8 +78,15 @@ public class UserResource {
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {
         try {
-            User newUser = userService.addUser(user);
-            return ResponseEntity.created(new URI("/users/" + newUser.getId())).body(user);
+            Optional<Course> course = courseService.getCourseById(user.getCourse().getId());
+
+            if (course.isPresent()) {
+                User newUser = userService.addUser(user);
+                newUser.setCourse(course.get());
+                return ResponseEntity.created(new URI("/users/" + newUser.getId())).body(user);
+            } else {
+                return ResponseEntity.badRequest().build();
+            }
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }

@@ -1,6 +1,7 @@
 package com.lpiot.ouila.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.lpiot.ouila.domain.Course;
 import com.lpiot.ouila.repositories.CourseRepository;
@@ -18,8 +19,8 @@ public class CourseService {
         return courseRepository.save(course);
     }
 
-    public Course getCourseById(Long courseId) {
-        return courseRepository.findById(courseId).get();
+    public Optional<Course> getCourseById(Long courseId) {
+        return courseRepository.findById(courseId);
     }
 
     public Course updateCourse(Long id, Course course) {
