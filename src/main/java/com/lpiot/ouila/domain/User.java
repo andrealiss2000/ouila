@@ -55,8 +55,7 @@ public class User {
 	@JoinColumn(name = "course_id", nullable = false, referencedColumnName = "id")
 	private Course course; // Formation
 
-	@ManyToOne(optional = false, targetEntity = Role.class)
-	@JoinColumn(name = "role_id", nullable = false, referencedColumnName = "id")
+	@Column(nullable = false)
 	private Role role;
 
 	@OneToMany(mappedBy = "student", cascade = CascadeType.ALL, targetEntity = Presence.class)

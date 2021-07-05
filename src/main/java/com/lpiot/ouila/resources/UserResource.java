@@ -4,9 +4,10 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
-import com.lpiot.ouila.domain.ERole;
+import com.lpiot.ouila.domain.Role;
 import com.lpiot.ouila.domain.Presence;
 import com.lpiot.ouila.domain.User;
+import com.lpiot.ouila.repositories.CourseRepository;
 import com.lpiot.ouila.services.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserResource {
     @Autowired
     UserService userService;
+
+    @Autowired
+    CourseRepository courseRepository;
 
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
@@ -61,12 +65,12 @@ public class UserResource {
 
     @GetMapping("/students")
     public ResponseEntity<List<User>> getAllStudents() {
-        return ResponseEntity.ok().body(userService.getUsersByRole(ERole.STUDENT));
+        return ResponseEntity.ok().body(userService.getUsersByRole(Role.STUDENT));
     }
 
     @GetMapping("/teachers")
     public ResponseEntity<List<User>> getAllTeachers() {
-        return ResponseEntity.ok().body(userService.getUsersByRole(ERole.TEACHER));
+        return ResponseEntity.ok().body(userService.getUsersByRole(Role.TEACHER));
     }
 
     @PostMapping
