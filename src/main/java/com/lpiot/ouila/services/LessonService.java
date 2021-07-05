@@ -1,6 +1,7 @@
 package com.lpiot.ouila.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.lpiot.ouila.domain.Lesson;
 import com.lpiot.ouila.repositories.LessonRepository;
@@ -18,8 +19,8 @@ public class LessonService {
         return repository.save(lesson);
     }
 
-    public Lesson getLessonById(Long lessonId) {
-        return repository.findById(lessonId).get();
+    public Optional<Lesson> getLessonById(Long lessonId) {
+        return repository.findById(lessonId);
     }
 
     public Lesson updateLesson(Long id, Lesson lesson) {
