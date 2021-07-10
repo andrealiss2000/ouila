@@ -8,6 +8,7 @@ import com.lpiot.ouila.services.SubjectService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,6 +41,7 @@ public class SubjectResource {
         }
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public ResponseEntity<Subject> createSubject(@RequestBody Subject subject) {
         try {
@@ -50,6 +52,7 @@ public class SubjectResource {
         }
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}")
     ResponseEntity<Subject> replaceSubject(@RequestBody Subject newSubject, @PathVariable Long id) {
         try {
@@ -59,6 +62,7 @@ public class SubjectResource {
         }
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     ResponseEntity<String> deleteSubject(@PathVariable Long id) {
         try {

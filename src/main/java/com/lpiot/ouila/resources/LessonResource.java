@@ -51,7 +51,7 @@ public class LessonResource {
         }
     }
 
-    @PreAuthorize("isAuthenticated() && hasRole('ADMIN') || hasRole('TEACHER')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('TEACHER')")
     @PostMapping
     public ResponseEntity<Lesson> createLesson(@RequestBody Lesson lesson) {
         try {
@@ -64,7 +64,7 @@ public class LessonResource {
         }
     }
 
-    @PreAuthorize("isAuthenticated() && hasRole('ADMIN') || hasRole('TEACHER')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('TEACHER')")
     @PutMapping("/{id}")
     ResponseEntity<Lesson> replaceLesson(@RequestBody Lesson newLesson, @PathVariable Long id) {
         try {
@@ -74,7 +74,7 @@ public class LessonResource {
         }
     }
 
-    @PreAuthorize("isAuthenticated() && hasRole('ADMIN') || hasRole('TEACHER')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('TEACHER')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteLesson(@PathVariable Long id) {

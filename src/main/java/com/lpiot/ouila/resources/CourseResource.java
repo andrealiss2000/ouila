@@ -47,7 +47,7 @@ public class CourseResource {
         }
     }
 
-    @PreAuthorize("isAuthenticated() && hasRole('ADMIN') || hasRole('TEACHER')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public ResponseEntity<Course> createCourse(@RequestBody Course course) {
         try {
@@ -58,7 +58,7 @@ public class CourseResource {
         }
     }
 
-    @PreAuthorize("isAuthenticated() && hasRole('ADMIN') || hasRole('TEACHER')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}")
     ResponseEntity<Course> replaceCourse(@RequestBody Course newCourse, @PathVariable Long id) {
         try {
@@ -68,7 +68,7 @@ public class CourseResource {
         }
     }
 
-    @PreAuthorize("isAuthenticated() && hasRole('ADMIN') || hasRole('TEACHER')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     ResponseEntity<String> deleteCourse(@PathVariable Long id) {
         try {

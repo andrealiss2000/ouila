@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,7 +24,8 @@ import java.util.stream.Collectors;
 public class DocumentUploadResource {
     @Autowired
     private StorageService storageService;
-
+    
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/documents")
     public ResponseEntity<List<String>> listAllFiles(Model model) {
         List<String> files = storageService.loadAll().map(path -> ServletUriComponentsBuilder.fromCurrentContextPath()

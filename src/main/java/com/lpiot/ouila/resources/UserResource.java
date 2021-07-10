@@ -61,7 +61,7 @@ public class UserResource {
         return ResponseEntity.ok().body(userService.getTeachers());
     }
 
-    @PreAuthorize("isAuthenticated() && hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) throws URISyntaxException {
         Course course = courseService.getCourseById(user.getCourse().getId())
@@ -72,14 +72,14 @@ public class UserResource {
         return ResponseEntity.created(new URI("/users/" + newUser.getId())).body(user);
     }
 
-    @PreAuthorize("isAuthenticated() && hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}")
     ResponseEntity<User> replaceUser(@RequestBody User newUser, @PathVariable Long id) {
         userService.updateUser(id, newUser).orElseThrow(() -> new UserNotFoundException(id));
         return ResponseEntity.ok().build();
     }
 
-    @PreAuthorize("isAuthenticated() && hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     ResponseEntity<String> deleteUser(@PathVariable Long id) {
         try {

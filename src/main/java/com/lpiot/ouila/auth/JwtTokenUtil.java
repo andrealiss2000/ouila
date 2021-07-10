@@ -1,11 +1,19 @@
 package com.lpiot.ouila.auth;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 
+import com.lpiot.ouila.domain.User;
+import com.lpiot.ouila.repositories.UserRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +25,9 @@ import io.jsonwebtoken.SignatureAlgorithm;
 public class JwtTokenUtil implements Serializable {
 	private static final long JWT_TOKEN_VALIDITY = 12 * 3600000;
 	private static final String JWT_TOKEN_SECRET = "here";
+
+	@Autowired
+	UserRepository userRepository;
 
 	public String getUsernameFromToken(String token) {
 		return getClaimFromToken(token, Claims::getSubject);
@@ -51,7 +62,12 @@ public class JwtTokenUtil implements Serializable {
 
 	public String generateToken(UserDetails userDetails) {
 		Map<String, Object> claims = new HashMap<>();
-		claims.put("role", userDetails.getAuthorities());
+		// claims.put("role", userDetails.getAuthorities());
+		Optional<User> user = userRepository.findByUsername(userDetails.getUsername());
+		if (user.isPresent()) {
+			claims.put("role", Arrays.asList(user.get().getRole().toString()));
+			claims.put("userId", user.get().getId());
+		}
 		return doGenerateToken(claims, userDetails.getUsername());
 	}
 

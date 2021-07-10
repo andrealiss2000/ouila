@@ -16,6 +16,7 @@ import com.lpiot.ouila.services.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,6 +51,7 @@ public class PresenceResource {
         return ResponseEntity.ok().body(presence);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('TEACHER')")
     @PostMapping
     public ResponseEntity<Presence> createPresence(@RequestBody Presence presence) throws URISyntaxException {
 
@@ -65,12 +67,14 @@ public class PresenceResource {
 
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('TEACHER')")
     @PutMapping("/{id}")
     ResponseEntity<Presence> updateAttendanceStatus(@RequestParam("status") Boolean status, @PathVariable Long id) {
         presenceService.updateAttendance(id, status).orElseThrow(() -> new PresenceNotFoundException(id));
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('TEACHER')")
     @DeleteMapping("/{id}")
     ResponseEntity<String> deletePresence(@PathVariable Long id) {
         try {
@@ -81,6 +85,7 @@ public class PresenceResource {
         }
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('TEACHER')")
     @GetMapping(value = "/qrcode")
     public ResponseEntity<String> getQrCode() {
         try {
