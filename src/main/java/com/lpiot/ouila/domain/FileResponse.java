@@ -1,4 +1,4 @@
-package com.lpiot.ouila.resources;
+package com.lpiot.ouila.domain;
 
 import lombok.Data;
 

@@ -20,6 +20,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
 @EnableConfigurationProperties(StorageProperties.class)
@@ -47,6 +49,7 @@ public class OuilaApplication {
 
 	@Bean
 	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
+		PasswordEncoder pe = new BCryptPasswordEncoder();
 		return args -> {
 			Subject s = new Subject();
 			s.setName("Anglais");
@@ -63,7 +66,7 @@ public class OuilaApplication {
 			u.setAddress("12 Dapin Way");
 			u.setCardNumber("55418882");
 			u.setEmail("wodney6@reference.com");
-			u.setPassword("xA3CYg9m");
+			u.setPassword(pe.encode("xA3CYg9m"));
 			u.setPhone("9819912223");
 			u.setUsername("wodney6");
 			u.setRole(Role.STUDENT);
