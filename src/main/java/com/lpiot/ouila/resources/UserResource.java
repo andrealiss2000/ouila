@@ -13,6 +13,7 @@ import com.lpiot.ouila.services.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -60,6 +61,7 @@ public class UserResource {
         return ResponseEntity.ok().body(userService.getTeachers());
     }
 
+    @PreAuthorize("isAuthenticated() && hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) throws URISyntaxException {
         Course course = courseService.getCourseById(user.getCourse().getId())
@@ -70,12 +72,14 @@ public class UserResource {
         return ResponseEntity.created(new URI("/users/" + newUser.getId())).body(user);
     }
 
+    @PreAuthorize("isAuthenticated() && hasRole('ADMIN')")
     @PutMapping("/{id}")
     ResponseEntity<User> replaceUser(@RequestBody User newUser, @PathVariable Long id) {
         userService.updateUser(id, newUser).orElseThrow(() -> new UserNotFoundException(id));
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("isAuthenticated() && hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     ResponseEntity<String> deleteUser(@PathVariable Long id) {
         try {

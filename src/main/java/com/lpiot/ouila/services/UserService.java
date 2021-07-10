@@ -8,14 +8,18 @@ import com.lpiot.ouila.domain.User;
 import com.lpiot.ouila.repositories.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
     @Autowired
     UserRepository repository;
+    private final static PasswordEncoder pe = new BCryptPasswordEncoder();
 
     public User addUser(User user) {
+        user.setPassword(pe.encode(user.getPassword()));
         return repository.save(user);
     }
 
@@ -47,7 +51,7 @@ public class UserService {
             c.setFirstName(user.getFirstName());
             c.setLastName(user.getLastName());
             c.setUsername(user.getUsername());
-            c.setPassword(user.getPassword());
+            c.setPassword(pe.encode(user.getPassword()));
             c.setPhone(user.getPhone());
             // update course
             return repository.save(c);

@@ -7,8 +7,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-
 import com.lpiot.ouila.domain.User;
 import com.lpiot.ouila.repositories.UserRepository;
 
@@ -24,7 +22,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		return userRepository.findByUsername(username)
 				.map(u -> new org.springframework.security.core.userdetails.User(u.getUsername(), u.getPassword(),
-						new ArrayList<>()))
+						u.getAuthorities()))
 				.orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
 
 	}

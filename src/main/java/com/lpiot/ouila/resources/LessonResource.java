@@ -10,6 +10,7 @@ import com.lpiot.ouila.services.LessonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,6 +51,7 @@ public class LessonResource {
         }
     }
 
+    @PreAuthorize("isAuthenticated() && hasRole('ADMIN') || hasRole('TEACHER')")
     @PostMapping
     public ResponseEntity<Lesson> createLesson(@RequestBody Lesson lesson) {
         try {
@@ -62,6 +64,7 @@ public class LessonResource {
         }
     }
 
+    @PreAuthorize("isAuthenticated() && hasRole('ADMIN') || hasRole('TEACHER')")
     @PutMapping("/{id}")
     ResponseEntity<Lesson> replaceLesson(@RequestBody Lesson newLesson, @PathVariable Long id) {
         try {
@@ -71,6 +74,7 @@ public class LessonResource {
         }
     }
 
+    @PreAuthorize("isAuthenticated() && hasRole('ADMIN') || hasRole('TEACHER')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteLesson(@PathVariable Long id) {

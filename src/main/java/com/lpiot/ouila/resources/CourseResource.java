@@ -9,6 +9,7 @@ import com.lpiot.ouila.services.CourseService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,6 +47,7 @@ public class CourseResource {
         }
     }
 
+    @PreAuthorize("isAuthenticated() && hasRole('ADMIN') || hasRole('TEACHER')")
     @PostMapping
     public ResponseEntity<Course> createCourse(@RequestBody Course course) {
         try {
@@ -56,6 +58,7 @@ public class CourseResource {
         }
     }
 
+    @PreAuthorize("isAuthenticated() && hasRole('ADMIN') || hasRole('TEACHER')")
     @PutMapping("/{id}")
     ResponseEntity<Course> replaceCourse(@RequestBody Course newCourse, @PathVariable Long id) {
         try {
@@ -65,6 +68,7 @@ public class CourseResource {
         }
     }
 
+    @PreAuthorize("isAuthenticated() && hasRole('ADMIN') || hasRole('TEACHER')")
     @DeleteMapping("/{id}")
     ResponseEntity<String> deleteCourse(@PathVariable Long id) {
         try {

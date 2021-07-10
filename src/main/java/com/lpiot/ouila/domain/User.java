@@ -1,5 +1,7 @@
 package com.lpiot.ouila.domain;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -13,6 +15,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -51,7 +56,7 @@ public class User {
 
 	private String address;
 
-	@ManyToOne(optional = false, targetEntity = Course.class)
+	@ManyToOne(optional = true, targetEntity = Course.class)
 	@JoinColumn(name = "course_id", nullable = false, referencedColumnName = "id")
 	private Course course; // Formation
 
@@ -61,5 +66,9 @@ public class User {
 	@OneToMany(mappedBy = "student", cascade = CascadeType.ALL, targetEntity = Presence.class)
 	@JsonIgnore
 	private List<Presence> presences;
+
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return Arrays.asList(new SimpleGrantedAuthority(role.toString()));
+	}
 
 }
