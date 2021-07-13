@@ -1,7 +1,8 @@
-package repositories;
+package com.lpiot.ouila.repositories;
 
-import domain.Subject;
-import exceptions.SubjectFormatException;
+import com.lpiot.ouila.exceptions.SubjectFormatException;
+
+import com.lpiot.ouila.domain.*;
 
 public interface SubjectRepository {
 	

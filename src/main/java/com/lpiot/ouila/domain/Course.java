@@ -1,4 +1,4 @@
-package domain;
+package com.lpiot.ouila.domain;
 
 public class Course {
 	private int id;

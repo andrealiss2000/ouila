@@ -1,4 +1,4 @@
-package repositories;
+package com.lpiot.ouila.repositories.impl;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
@@ -10,8 +10,9 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import domain.Subject;
-import exceptions.SubjectFormatException;
+import com.lpiot.ouila.exceptions.SubjectFormatException;
+import com.lpiot.ouila.repositories.SubjectRepository;
+import com.lpiot.ouila.domain.*;
 
 
 @Repository

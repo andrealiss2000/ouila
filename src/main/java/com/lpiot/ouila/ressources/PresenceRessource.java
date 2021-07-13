@@ -1,4 +1,4 @@
-package ressources;
+package com.lpiot.ouila.ressources;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

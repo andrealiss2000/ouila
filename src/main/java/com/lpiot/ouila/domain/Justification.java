@@ -1,4 +1,4 @@
-package domain;
+package com.lpiot.ouila.domain;
 
 import java.sql.Blob;
 

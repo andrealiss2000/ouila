@@ -1,4 +1,4 @@
-package services;
+package com.lpiot.ouila.services.impl;
 
 import java.util.regex.Pattern;
 
@@ -6,9 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import domain.Subject;
-import exceptions.SubjectFormatException;
-import repositories.SubjectRepository;
+import com.lpiot.ouila.exceptions.SubjectFormatException;
+import com.lpiot.ouila.repositories.SubjectRepository;
+import com.lpiot.ouila.services.SubjectService;
+import com.lpiot.ouila.domain.*;
 
 
 @Service
